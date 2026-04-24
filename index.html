@@ -74,30 +74,50 @@
             text-align: center;
         }
 
-        .keys {
-            display: flex;
-            gap: 20px;
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .example {
             margin: 30px 0;
-        }
-
-        .key-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .key-box {
-            width: 60px;
-            height: 60px;
-            border: 3px solid #ffd700;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.1);
             border-radius: 10px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .example-text {
+            color: #48dbfb;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .example-notes {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .example-note {
+            width: 70px;
+            height: 50px;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #ffd700;
-            margin-bottom: 5px;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .example-note.letter {
+            background: linear-gradient(135deg, #ff6b6b, #c44569);
+        }
+
+        .example-note.arrow {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
         }
 
         .btn {
@@ -217,46 +237,21 @@
 
         <div id="startScreen">
             <h1>🎵 音乐节奏游戏 🎵</h1>
-            <p class="instruction">当音符滑过黄色判定线时按下对应按键</p>
-            <p class="instruction">按得越准确，得分越高！</p>
+            <p class="instruction">当带有<span class="highlight">字母</span>或<span class="highlight">方向键</span>的音符滑过</p>
+            <p class="instruction"><span class="highlight">底部黄色判定区域</span>时，按下键盘上<span class="highlight">对应的键</span></p>
             
-            <div class="keys">
-                <div class="key-info">
-                    <div class="key-box">D</div>
-                    <span style="color: #ff6b6b;">左</span>
+            <div class="example">
+                <p class="example-text">比如看到这些音符滑过时：</p>
+                <div class="example-notes">
+                    <div class="example-note letter">A</div>
+                    <div class="example-note arrow">↓</div>
+                    <div class="example-note letter">Q</div>
+                    <div class="example-note arrow">→</div>
                 </div>
-                <div class="key-info">
-                    <div class="key-box">F</div>
-                    <span style="color: #feca57;">中左</span>
-                </div>
-                <div class="key-info">
-                    <div class="key-box">J</div>
-                    <span style="color: #48dbfb;">中右</span>
-                </div>
-                <div class="key-info">
-                    <div class="key-box">K</div>
-                    <span style="color: #ff9ff3;">右</span>
-                </div>
+                <p class="example-text" style="margin-top: 15px;">分别按下键盘上的：<span class="highlight">A</span>、<span class="highlight">↓</span>、<span class="highlight">Q</span>、<span class="highlight">→</span></p>
             </div>
-            
-            <div class="keys">
-                <div class="key-info">
-                    <div class="key-box">↑</div>
-                    <span style="color: #1dd1a1;">上</span>
-                </div>
-                <div class="key-info">
-                    <div class="key-box">↓</div>
-                    <span style="color: #54a0ff;">下</span>
-                </div>
-                <div class="key-info">
-                    <div class="key-box">←</div>
-                    <span style="color: #ff6b6b;">左</span>
-                </div>
-                <div class="key-info">
-                    <div class="key-box">→</div>
-                    <span style="color: #ff9ff3;">右</span>
-                </div>
-            </div>
+
+            <p class="instruction">按得越准确，得分越高！Perfect得100分，Good得50分</p>
 
             <button class="btn" id="startBtn">开始游戏</button>
         </div>
@@ -304,29 +299,33 @@
                 this.gameTime = 60;
 
                 this.lanes = [
-                    { key: 'd', x: 150, color: '#ff6b6b' },
-                    { key: 'f', x: 275, color: '#feca57' },
-                    { key: 'j', x: 425, color: '#48dbfb' },
-                    { key: 'k', x: 550, color: '#ff9ff3' },
-                    { key: 'ArrowUp', x: 150, color: '#1dd1a1' },
-                    { key: 'ArrowDown', x: 275, color: '#54a0ff' },
-                    { key: 'ArrowLeft', x: 425, color: '#ff6b6b' },
-                    { key: 'ArrowRight', x: 550, color: '#ff9ff3' }
+                    { x: 110, width: 130, color: 'rgba(255, 107, 107, 0.1)', borderColor: '#ff6b6b' },
+                    { x: 235, width: 130, color: 'rgba(254, 202, 87, 0.1)', borderColor: '#feca57' },
+                    { x: 385, width: 130, color: 'rgba(72, 219, 251, 0.1)', borderColor: '#48dbfb' },
+                    { x: 510, width: 130, color: 'rgba(255, 159, 243, 0.1)', borderColor: '#ff9ff3' }
                 ];
 
                 this.judgmentY = this.height - 100;
-                this.judgmentPerfectRange = 30;
-                this.judgmentGoodRange = 60;
-                this.judgmentHitRange = 80;
+                this.judgmentPerfectRange = 25;
+                this.judgmentGoodRange = 50;
+                this.judgmentHitRange = 70;
 
                 this.notes = [];
-                this.noteSpeed = 5;
+                this.noteSpeed = 2.5;
                 this.noteWidth = 80;
-                this.noteHeight = 40;
+                this.noteHeight = 50;
+
+                this.letterKeys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+                this.arrowKeys = [
+                    { key: 'ArrowUp', display: '↑' },
+                    { key: 'ArrowDown', display: '↓' },
+                    { key: 'ArrowLeft', display: '←' },
+                    { key: 'ArrowRight', display: '→' }
+                ];
 
                 this.pressedKeys = new Set();
                 this.lastNoteTime = 0;
-                this.noteInterval = 600;
+                this.noteInterval = 1000;
 
                 this.judgmentElement = document.getElementById('judgment');
                 this.scoreDisplay = document.getElementById('scoreDisplay');
@@ -346,8 +345,10 @@
 
                 document.addEventListener('keydown', (e) => {
                     if (this.gameState !== 'playing') return;
-                    const key = e.key.toLowerCase();
-                    if (['d', 'f', 'j', 'k'].includes(key) || 
+                    
+                    const key = e.key.toUpperCase();
+                    
+                    if (this.letterKeys.includes(key) || 
                         ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                         e.preventDefault();
                         this.handleKeyPress(e.key);
@@ -355,7 +356,8 @@
                 });
 
                 document.addEventListener('keyup', (e) => {
-                    this.pressedKeys.delete(e.key.toLowerCase());
+                    this.pressedKeys.delete(e.key.toUpperCase());
+                    this.pressedKeys.delete(e.key);
                 });
             }
 
@@ -370,6 +372,7 @@
                 this.gameTime = 60;
                 this.notes = [];
                 this.lastNoteTime = Date.now();
+                this.noteInterval = 1000;
 
                 document.getElementById('startScreen').classList.add('hidden');
                 document.getElementById('gameOverScreen').classList.add('hidden');
@@ -386,7 +389,7 @@
                 this.gameState = 'gameOver';
                 clearInterval(this.timer);
 
-                document.getElementById('finalScore').textContent = this.score;
+                document.getElementById('finalScore').textContent = Math.floor(this.score);
                 document.getElementById('perfectCount').textContent = this.perfectCount;
                 document.getElementById('goodCount').textContent = this.goodCount;
                 document.getElementById('missCount').textContent = this.missCount;
@@ -394,26 +397,26 @@
                 document.getElementById('gameOverScreen').classList.remove('hidden');
             }
 
-            handleKeyPress(key) {
-                if (this.pressedKeys.has(key.toLowerCase())) return;
-                this.pressedKeys.add(key.toLowerCase());
-
-                const lane = this.lanes.find(l => 
-                    l.key === key.toLowerCase() || l.key === key
-                );
-                if (!lane) return;
+            handleKeyPress(pressedKey) {
+                const normalizedKey = pressedKey.length === 1 ? pressedKey.toUpperCase() : pressedKey;
+                
+                if (this.pressedKeys.has(normalizedKey)) return;
+                this.pressedKeys.add(normalizedKey);
 
                 let hitNote = null;
                 let bestDistance = Infinity;
 
                 for (const note of this.notes) {
-                    if (note.hit || 
-                        (note.laneKey !== key.toLowerCase() && note.laneKey !== key)) continue;
+                    if (note.hit) continue;
 
-                    const distance = Math.abs(note.y - this.judgmentY);
-                    if (distance < bestDistance && distance <= this.judgmentHitRange) {
-                        bestDistance = distance;
-                        hitNote = note;
+                    let noteKey = note.isArrow ? note.originalKey : note.displayKey;
+                    
+                    if (noteKey === normalizedKey) {
+                        const distance = Math.abs(note.y - this.judgmentY);
+                        if (distance < bestDistance && distance <= this.judgmentHitRange) {
+                            bestDistance = distance;
+                            hitNote = note;
+                        }
                     }
                 }
 
@@ -450,22 +453,50 @@
                 }, 300);
             }
 
+            getRandomNote() {
+                const isArrow = Math.random() < 0.3;
+                
+                if (isArrow) {
+                    const randomArrow = this.arrowKeys[Math.floor(Math.random() * this.arrowKeys.length)];
+                    return {
+                        displayKey: randomArrow.display,
+                        originalKey: randomArrow.key,
+                        isArrow: true,
+                        color: '#4ecdc4'
+                    };
+                } else {
+                    const randomLetter = this.letterKeys[Math.floor(Math.random() * this.letterKeys.length)];
+                    return {
+                        displayKey: randomLetter,
+                        originalKey: randomLetter,
+                        isArrow: false,
+                        color: '#ff6b6b'
+                    };
+                }
+            }
+
             spawnNote() {
                 const now = Date.now();
                 if (now - this.lastNoteTime >= this.noteInterval) {
                     const randomLaneIndex = Math.floor(Math.random() * this.lanes.length);
                     const lane = this.lanes[randomLaneIndex];
+                    const noteData = this.getRandomNote();
+                    
+                    const noteX = lane.x + (lane.width - this.noteWidth) / 2;
                     
                     this.notes.push({
-                        laneKey: lane.key,
-                        x: lane.x,
+                        displayKey: noteData.displayKey,
+                        originalKey: noteData.originalKey,
+                        isArrow: noteData.isArrow,
+                        x: noteX,
                         y: -this.noteHeight,
-                        color: lane.color,
+                        color: noteData.color,
+                        laneColor: lane.borderColor,
                         hit: false
                     });
 
                     this.lastNoteTime = now;
-                    this.noteInterval = Math.max(300, 600 - (60 - this.gameTime) * 5);
+                    this.noteInterval = Math.max(600, 1000 - (60 - this.gameTime) * 7);
                 }
             }
 
@@ -502,46 +533,53 @@
                 this.drawLanes();
                 this.drawJudgmentLine();
                 this.drawNotes();
-                this.drawKeyIndicators();
             }
 
             drawLanes() {
-                const lanePositions = [110, 235, 385, 510];
-                for (const x of lanePositions) {
-                    this.ctx.fillStyle = 'rgba(255, 215, 0, 0.05)';
-                    this.ctx.fillRect(x, 0, 130, this.height);
+                for (const lane of this.lanes) {
+                    this.ctx.fillStyle = lane.color;
+                    this.ctx.fillRect(lane.x, 0, lane.width, this.height);
 
-                    this.ctx.strokeStyle = 'rgba(255, 215, 0, 0.1)';
+                    this.ctx.strokeStyle = lane.borderColor;
                     this.ctx.lineWidth = 2;
+                    this.ctx.globalAlpha = 0.3;
+                    
                     this.ctx.beginPath();
-                    this.ctx.moveTo(x, 0);
-                    this.ctx.lineTo(x, this.height);
+                    this.ctx.moveTo(lane.x, 0);
+                    this.ctx.lineTo(lane.x, this.height);
                     this.ctx.stroke();
 
                     this.ctx.beginPath();
-                    this.ctx.moveTo(x + 130, 0);
-                    this.ctx.lineTo(x + 130, this.height);
+                    this.ctx.moveTo(lane.x + lane.width, 0);
+                    this.ctx.lineTo(lane.x + lane.width, this.height);
                     this.ctx.stroke();
+
+                    this.ctx.globalAlpha = 1;
                 }
             }
 
             drawJudgmentLine() {
-                const gradient = this.ctx.createLinearGradient(0, this.judgmentY - 40, 0, this.judgmentY + 40);
+                const gradient = this.ctx.createLinearGradient(0, this.judgmentY - 50, 0, this.judgmentY + 50);
                 gradient.addColorStop(0, 'rgba(255, 215, 0, 0)');
-                gradient.addColorStop(0.5, 'rgba(255, 215, 0, 0.3)');
+                gradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.2)');
+                gradient.addColorStop(0.5, 'rgba(255, 215, 0, 0.4)');
+                gradient.addColorStop(0.7, 'rgba(255, 215, 0, 0.2)');
                 gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
                 this.ctx.fillStyle = gradient;
-                this.ctx.fillRect(0, this.judgmentY - 40, this.width, 80);
+                this.ctx.fillRect(100, this.judgmentY - 50, this.width - 200, 100);
 
                 this.ctx.strokeStyle = '#ffd700';
-                this.ctx.lineWidth = 3;
+                this.ctx.lineWidth = 4;
                 this.ctx.shadowColor = '#ffd700';
-                this.ctx.shadowBlur = 20;
+                this.ctx.shadowBlur = 25;
                 this.ctx.beginPath();
                 this.ctx.moveTo(100, this.judgmentY);
                 this.ctx.lineTo(this.width - 100, this.judgmentY);
                 this.ctx.stroke();
                 this.ctx.shadowBlur = 0;
+
+                this.ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+                this.ctx.fillRect(100, this.judgmentY - 35, this.width - 200, 70);
             }
 
             drawNotes() {
@@ -549,92 +587,51 @@
                     if (note.hit) continue;
 
                     this.ctx.shadowColor = note.color;
-                    this.ctx.shadowBlur = 15;
+                    this.ctx.shadowBlur = 20;
 
-                    this.ctx.fillStyle = note.color;
-                    this.ctx.fillRect(
-                        note.x,
-                        note.y,
-                        this.noteWidth,
-                        this.noteHeight
-                    );
+                    const gradient = this.ctx.createLinearGradient(note.x, note.y, note.x, note.y + this.noteHeight);
+                    if (note.isArrow) {
+                        gradient.addColorStop(0, '#4ecdc4');
+                        gradient.addColorStop(1, '#44a08d');
+                    } else {
+                        gradient.addColorStop(0, '#ff6b6b');
+                        gradient.addColorStop(1, '#c44569');
+                    }
+                    
+                    this.ctx.fillStyle = gradient;
+                    
+                    const radius = 8;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(note.x + radius, note.y);
+                    this.ctx.lineTo(note.x + this.noteWidth - radius, note.y);
+                    this.ctx.quadraticCurveTo(note.x + this.noteWidth, note.y, note.x + this.noteWidth, note.y + radius);
+                    this.ctx.lineTo(note.x + this.noteWidth, note.y + this.noteHeight - radius);
+                    this.ctx.quadraticCurveTo(note.x + this.noteWidth, note.y + this.noteHeight, note.x + this.noteWidth - radius, note.y + this.noteHeight);
+                    this.ctx.lineTo(note.x + radius, note.y + this.noteHeight);
+                    this.ctx.quadraticCurveTo(note.x, note.y + this.noteHeight, note.x, note.y + this.noteHeight - radius);
+                    this.ctx.lineTo(note.x, note.y + radius);
+                    this.ctx.quadraticCurveTo(note.x, note.y, note.x + radius, note.y);
+                    this.ctx.fill();
 
-                    this.ctx.strokeStyle = 'white';
+                    this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
                     this.ctx.lineWidth = 2;
-                    this.ctx.strokeRect(
-                        note.x,
-                        note.y,
-                        this.noteWidth,
-                        this.noteHeight
-                    );
+                    this.ctx.stroke();
 
                     this.ctx.shadowBlur = 0;
                     this.ctx.fillStyle = 'white';
-                    this.ctx.font = 'bold 20px Arial';
+                    this.ctx.font = 'bold 28px Arial';
                     this.ctx.textAlign = 'center';
                     this.ctx.textBaseline = 'middle';
-                    
-                    let displayKey = note.laneKey;
-                    if (note.laneKey === 'ArrowUp') displayKey = '↑';
-                    else if (note.laneKey === 'ArrowDown') displayKey = '↓';
-                    else if (note.laneKey === 'ArrowLeft') displayKey = '←';
-                    else if (note.laneKey === 'ArrowRight') displayKey = '→';
-                    else displayKey = displayKey.toUpperCase();
+                    this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                    this.ctx.shadowBlur = 5;
 
                     this.ctx.fillText(
-                        displayKey,
+                        note.displayKey,
                         note.x + this.noteWidth / 2,
                         note.y + this.noteHeight / 2
                     );
-                }
-            }
-
-            drawKeyIndicators() {
-                const keyLanes = [
-                    { x: 150, key: 'D', color: '#ff6b6b' },
-                    { x: 275, key: 'F', color: '#feca57' },
-                    { x: 425, key: 'J', color: '#48dbfb' },
-                    { x: 550, key: 'K', color: '#ff9ff3' }
-                ];
-
-                for (const lane of keyLanes) {
-                    const isPressed = this.pressedKeys.has(lane.key.toLowerCase());
-                    
-                    if (isPressed) {
-                        this.ctx.fillStyle = lane.color;
-                        this.ctx.shadowColor = lane.color;
-                        this.ctx.shadowBlur = 20;
-                    } else {
-                        this.ctx.fillStyle = 'rgba(50, 50, 70, 0.8)';
-                        this.ctx.shadowBlur = 0;
-                    }
-
-                    this.ctx.fillRect(
-                        lane.x,
-                        this.judgmentY + 20,
-                        this.noteWidth,
-                        30
-                    );
-
-                    this.ctx.strokeStyle = isPressed ? 'white' : 'rgba(255, 215, 0, 0.5)';
-                    this.ctx.lineWidth = 2;
-                    this.ctx.strokeRect(
-                        lane.x,
-                        this.judgmentY + 20,
-                        this.noteWidth,
-                        30
-                    );
 
                     this.ctx.shadowBlur = 0;
-                    this.ctx.fillStyle = isPressed ? 'white' : 'rgba(255, 255, 255, 0.7)';
-                    this.ctx.font = 'bold 16px Arial';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.textBaseline = 'middle';
-                    this.ctx.fillText(
-                        lane.key,
-                        lane.x + this.noteWidth / 2,
-                        this.judgmentY + 35
-                    );
                 }
             }
 
